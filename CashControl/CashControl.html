@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashControl</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <img src="loguito.png" alt="Logo" class="logo">
+        <h1>CashControl</h1>
+        <div id="saldo">
+            <label for="currentBalance">Saldo Actual:</label>
+            <span id="currentBalance">$0</span>
+        </div>
+    </header>
+    <main>
+        <div class="flex-container">
+            <!-- Sección de Presupuesto -->
+            <section id="presupuesto">
+                <h2>Presupuesto</h2>
+                <div class="input-group">
+                    <label for="presupuestoNombre">Nombre del Ingreso:</label>
+                    <input type="text" id="presupuestoNombre">
+                </div>
+                <div class="input-group">
+                    <label for="presupuestoCantidad">Cantidad:</label>
+                    <input type="number" id="presupuestoCantidad">
+                </div>
+                <div class="input-group">
+                    <label for="presupuestoFecha">Fecha:</label>
+                    <input type="date" id="presupuestoFecha">
+                </div>
+                <button id="agregarPresupuesto">Agregar Presupuesto</button>
+                <button id="historialPresupuesto">Ver Historial</button>
+            </section>
+
+            <!-- Sección de Gastos -->
+            <section id="gastos">
+                <h2>Gastos</h2>
+                <div class="input-group">
+                    <label for="gastoMonto">Monto:</label>
+                    <input type="number" id="gastoMonto">
+                </div>
+                <div class="input-group">
+                    <label for="gastoTipo">Tipo de Gasto:</label>
+                    <select id="gastoTipo">
+                        <option value="alimentacion">Alimentación</option>
+                        <option value="entretenimiento">Entretenimiento</option>
+                        <option value="vivienda">Vivienda</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="gastoDescripcion">Descripción:</label>
+                    <input type="text" id="gastoDescripcion">
+                </div>
+                <div class="input-group">
+                    <label for="gastoFecha">Fecha:</label>
+                    <input type="date" id="gastoFecha">
+                </div>
+                <button id="agregarGasto">Agregar Gasto</button>
+            </section>
+
+            <!-- Sección de Objetivos Financieros -->
+            <section id="objetivos">
+                <h2>Objetivos Financieros</h2>
+                <div class="input-group">
+                    <label for="objetivoMonto">Monto a Ahorrar:</label>
+                    <input type="number" id="objetivoMonto">
+                </div>
+                <div class="input-group">
+                    <label for="objetivoAhorrado">Monto Ahorrado:</label>
+                    <input type="number" id="objetivoAhorrado">
+                </div>
+                <div class="input-group">
+                    <label for="objetivoDescripcion">Descripción:</label>
+                    <input type="text" id="objetivoDescripcion">
+                </div>
+                <div class="input-group">
+                    <label for="objetivoFechaLimite">Fecha de actualización:</label>
+                    <input type="date" id="objetivoFechaLimite">
+                </div>
+                <button id="agregarObjetivo">Agregar Objetivo</button>
+            </section>
+        </div>
+
+        <!-- Sección de Historial de Presupuestos -->
+        <section id="historialPresupuestos" class="oculto">
+            <h2>Historial de Presupuestos</h2>
+            <ul id="listaHistorialPresupuestos">
+                
+            </ul>
+        </section>
+
+        <!-- Sección de Listas de Gastos y Objetivos Financieros -->
+        <section id="listas">
+            <h2>Lista de Gastos y Objetivos Financieros</h2>
+            <div id="gastosList">
+                <h3>Lista de Gastos</h3>
+                <ul id="listaGastos">
+                    
+                </ul>
+            </div>
+            <div id="objetivosList">
+                <h3>Lista de Objetivos Financieros</h3>
+                <ul id="listaObjetivos">
+                    
+                </ul>
+            </div>
+        </section>
+
+        <!-- Sección de Edición -->
+        <section id="editar" style="display:none;">
+            <h3>Editar Gasto/Abono</h3>
+            <div class="input-group">
+                <label for="editarMonto">Monto:</label>
+                <input type="number" id="editarMonto">
+            </div>
+            <div class="input-group" id="tipoGastoInput" style="display:none;">
+                <label for="editarTipo">Tipo de Gasto:</label>
+                <select id="editarTipo">
+                    <option value="alimentacion">Alimentación</option>
+                    <option value="entretenimiento">Entretenimiento</option>
+                    <option value="vivienda">Vivienda</option>
+                </select>
+            </div>
+            <div class="input-group" id="descripcionInput">
+                <label for="editarDescripcion">Descripción:</label>
+                <input type="text" id="editarDescripcion">
+            </div>
+            <div class="input-group">
+                <label for="editarFecha">Fecha:</label>
+                <input type="date" id="editarFecha">
+            </div>
+            <button id="guardarCambios">Guardar Cambios</button>
+            <button id="cancelarEdicion">Cancelar</button>
+        </section>
+        
+        <!-- Sección de Balance -->
+        <section id="balance">
+            <h2>Balance</h2>
+            <div id="balanceOutput">
+                <p>Saldo Libre: $0.00</p>
+                <p>Total Gastado: $0.00</p>
+                <p>Total Ahorrado: $0.00</p>
+            </div>
+            <button id="generarBalance">Generar Balance</button>
+        </section>
+
+        <!-- mostrar información del balance -->
+        <div id="modalBalance" class="modal oculto">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Detalles del Balance</h2>
+                <p id="modalTotalIngresos"></p>
+                <p id="modalTotalGastos"></p>
+                <p id="modalSaldoDisponible"></p>
+                <p id="modalTotalAhorrado"></p>
+            </div>
+        </div>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
